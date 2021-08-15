@@ -625,7 +625,7 @@ def continuar(update, context):
 if __name__ == '__main__':
 
     updater = Updater(
-        token=os.environ(['TOKEN']), use_context=True)
+        token=os.environ['TOKEN'], use_context=True)
 
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('start', start))
