@@ -144,17 +144,18 @@ FRASES = [
 
 
 def start(update, context):
-    global CHAT_ID
-    CHAT_ID=update.message.chat 
-    update.message.chat.send_action(action=ChatAction.TYPING, timeout=None)
-    update.message.reply_text(FRASES[14])
-    update.message.chat.send_action(action=ChatAction.TYPING, timeout=None)
-    update.message.reply_text('Selecciona la pregunta que deseas contestar '+emoji_pregunta+', irás obteniendo premios '+emoji_regalo+' a medida que avances, hasta lograr el PREMIO FINAL'+emojize(":star-struck:", use_aliases=True), reply_markup=InlineKeyboardMarkup([
-        [button1, button2, button3, button4, button5],
-        [button6, button7, button8, button9, button10],
-        [button11, button12, button13, button14],
-    ])
-    )
+    update.message.reply_text('Hello World')
+#     global CHAT_ID
+#     CHAT_ID=update.message.chat 
+#     update.message.chat.send_action(action=ChatAction.TYPING, timeout=None)
+#     update.message.reply_text(FRASES[14])
+#     update.message.chat.send_action(action=ChatAction.TYPING, timeout=None)
+#     update.message.reply_text('Selecciona la pregunta que deseas contestar '+emoji_pregunta+', irás obteniendo premios '+emoji_regalo+' a medida que avances, hasta lograr el PREMIO FINAL'+emojize(":star-struck:", use_aliases=True), reply_markup=InlineKeyboardMarkup([
+#         [button1, button2, button3, button4, button5],
+#         [button6, button7, button8, button9, button10],
+#         [button11, button12, button13, button14],
+#     ])
+#     )
     
 
 
