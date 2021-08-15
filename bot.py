@@ -709,6 +709,8 @@ def list_update(update, context):
 
 def regalo(update, context):
     text=emojize(":pleading_face:")
+    update.callback_query.message.chat.send_action(action=ChatAction.UPLOAD_PHOTO, timeout=1)
+    CHAT_ID.send_photo(open('image.jpg','rb'))
     CHAT_ID.send_message('<b>T</b> <del>odo en 1</del>\n<b>E</b> <del>strellas</del>\n\n<b>C</b> <del>osquillas</del>\n<b>A</b> <del>dicto</del>\n<b>S</b> <del>ol</del>\n<b>A</b> <del>mor</del>\n<b>S</b> <del>tudio 55</del>\n\n<b>C</b> <del>hocolate</del>\n<b>O</b> <del>range</del>\n<b>N</b> <del>o pagar</del>\n<b>M</b> <del>iércoles</del>\n<b> I</b>  <del>zquierdo</del>\n<b>G</b> <del>igante</del>\n<b>O</b> <del>rgullo y prejucio</del>\n<b>?</b> Di que si '+text, parse_mode=ParseMode.HTML)
     return ConversationHandler.END
 
