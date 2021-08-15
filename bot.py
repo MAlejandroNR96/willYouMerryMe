@@ -143,6 +143,8 @@ FRASES = [
 
 def start(update, context):
 #     update.message.reply_text('Hello World')
+    for pregunta in PREGUNTAS:
+        pregunta['completado'] = False
     global CHAT_ID
     CHAT_ID=update.message.chat
     global button1
