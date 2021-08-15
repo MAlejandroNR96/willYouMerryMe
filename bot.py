@@ -185,7 +185,7 @@ def responder1(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA1
 
 
@@ -217,7 +217,7 @@ def responder2(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text='emojize(":red_exclamation_mark:", use_aliases=True)+' emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA2
 
 
@@ -247,7 +247,7 @@ def responder3(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA3
 
 
@@ -277,7 +277,7 @@ def responder4(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA4
 
 
@@ -307,7 +307,7 @@ def responder5(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA5
 
 
@@ -337,7 +337,7 @@ def responder6(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA6
 
 
@@ -367,7 +367,7 @@ def responder7(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA7
 
 
@@ -397,7 +397,7 @@ def responder8(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA8
 
 
@@ -427,7 +427,7 @@ def responder9(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA9
 
 
@@ -457,7 +457,7 @@ def responder10(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA10
 
 
@@ -487,7 +487,7 @@ def responder11(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA11
 
 
@@ -517,7 +517,7 @@ def responder12(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA12
 
 def pregunta13(update, context):
@@ -545,7 +545,7 @@ def responder13(update, context):
         )
         return ConversationHandler.END
     else:
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA13
 
 
@@ -574,7 +574,7 @@ def responder14(update, context):
         )
         return ConversationHandler.END
     else:
-        chat.send_message(text='Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA14
 
 
