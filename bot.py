@@ -185,7 +185,7 @@ def responder1(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA1
 
 
@@ -217,7 +217,7 @@ def responder2(update, context):
         return ConversationHandler.END
     else:
         chat.send_action(action=ChatAction.TYPING, timeout=None)
-        chat.send_message(text='emojize(":red_exclamation_mark:", use_aliases=True)+' emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
+        chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA2
 
 
@@ -626,7 +626,6 @@ if __name__ == '__main__':
 
     updater = Updater(
         token=os.environ['TOKEN'], use_context=True)
-
     dp = updater.dispatcher
     dp.add_handler(CommandHandler('start', start))
     dp.add_handler(ConversationHandler(
