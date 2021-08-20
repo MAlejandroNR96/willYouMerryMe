@@ -215,7 +215,6 @@ def responder1(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[0] or text.lower() == 'todo en uno' or text.lower() == 'todo en 1' or text.lower() == 'todo por uno' or text.lower() == 'todo por 1':
         PREGUNTAS[0]['completado'] = True
-        RESPUESTAS_CORRECTAS[0]=text
         chat.send_action(action=ChatAction.TYPING, timeout=1)
         chat.send_message(text=FRASES[0])
         chat.send_sticker(sticker_corazon_rojo)
@@ -256,7 +255,6 @@ def responder2(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[1] or text.lower() == 'estrella':
         PREGUNTAS[1]['completado'] = True
-        RESPUESTAS_CORRECTAS[1]=text
         chat.send_action(action=ChatAction.TYPING, timeout=1)
         chat.send_message(text=FRASES[1])
         chat.send_sticker(sticker_toruga_corazon)
@@ -294,7 +292,6 @@ def responder3(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[2] or text.lower() == 'cosquilla':
         PREGUNTAS[2]['completado'] = True
-        RESPUESTAS_CORRECTAS[2]=text
         chat.send_action(action=ChatAction.TYPING, timeout=1)
         chat.send_message(text=FRASES[2])
         chat.send_sticker(sticker_fantasmas_corazon)
