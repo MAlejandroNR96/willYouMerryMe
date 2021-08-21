@@ -2,6 +2,8 @@ from telegram.ext import Updater, CommandHandler, ConversationHandler, CallbackQ
 from telegram import ChatAction, InlineKeyboardMarkup, InlineKeyboardButton, ParseMode
 from emoji import emojize
 import os
+from time import sleep
+from random import random
 
 CHAT_ID=0
 PREGUNTA1 = 1
@@ -192,10 +194,14 @@ def start(update, context):
     button12 = InlineKeyboardButton(text=emojize("12", use_aliases=True), callback_data='pregunta12')
     button13 = InlineKeyboardButton(text=emojize("13", use_aliases=True), callback_data='pregunta13')
     button14 = InlineKeyboardButton(text=emojize("14", use_aliases=True), callback_data='pregunta14') 
-    update.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
+    update.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
     update.message.reply_text(FRASES[14])
-    update.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
+    update.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random())
     chat.send_sticker(sticker_coronavirus)
+    update.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
     update.message.reply_text('Selecciona la pregunta que deseas contestar '+emoji_pregunta+', irás obteniendo premios '+emoji_regalo+' a medida que avances, hasta lograr el PREMIO FINAL'+emojize(":star-struck:", use_aliases=True), reply_markup=InlineKeyboardMarkup([
         [button1, button2, button3, button4, button5],
         [button6, button7, button8, button9, button10],
@@ -204,10 +210,10 @@ def start(update, context):
     )
     
 def pregunta1(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[0]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[0]['pregunta'])
     return PREGUNTA1
 
 def responder1(update, context):
@@ -215,18 +221,27 @@ def responder1(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[0] or text.lower() == 'todo en uno' or text.lower() == 'todo en 1' or text.lower() == 'todo por uno' or text.lower() == 'todo por 1':
         PREGUNTAS[0]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[0])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_corazon_rojo)
         global button1
         button1 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -235,18 +250,22 @@ def responder1(update, context):
             )
             return ConversationHandler.END
     else:
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA1
 
 
 def pregunta2(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[1]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[1]['pregunta'])
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random())
     CHAT_ID.send_sticker(sticker_musica)    
-    update.callback_query.message.chat.send_action(action=ChatAction.UPLOAD_AUDIO, timeout=1)
+    update.callback_query.message.chat.send_action(action=ChatAction.UPLOAD_AUDIO)
+    sleep(random()+2)
     CHAT_ID.send_audio(audio = open('audio.mp3','rb'))
     return PREGUNTA2
 
@@ -255,18 +274,27 @@ def responder2(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[1] or text.lower() == 'estrella':
         PREGUNTAS[1]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[1])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_toruga_corazon)
         global button2
         button2 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -275,16 +303,17 @@ def responder2(update, context):
             )
             return ConversationHandler.END
     else:
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA2
 
 
 def pregunta3(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[2]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[2]['pregunta'])
     return PREGUNTA3
 
 def responder3(update, context):
@@ -292,18 +321,27 @@ def responder3(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[2] or text.lower() == 'cosquilla':
         PREGUNTAS[2]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[2])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_fantasmas_corazon)
         global button3
         button3 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -312,16 +350,17 @@ def responder3(update, context):
             )
             return ConversationHandler.END
     else:
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA3
 
 
 def pregunta4(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[3]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[3]['pregunta'])
     return PREGUNTA4
 
 def responder4(update, context):
@@ -329,18 +368,27 @@ def responder4(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[3]:
         PREGUNTAS[3]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[3])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_vino)
         global button4
         button4 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -349,16 +397,17 @@ def responder4(update, context):
             )
             return ConversationHandler.END
     else:
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA4
 
 
 def pregunta5(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[4]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[4]['pregunta'])
     return PREGUNTA5
 
 def responder5(update, context):
@@ -366,18 +415,27 @@ def responder5(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[4]:
         PREGUNTAS[4]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[4])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_varios_corazones_rosas)
         global button5
         button5 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -388,20 +446,29 @@ def responder5(update, context):
     
     elif text.lower() == 'mi sol':
         PREGUNTAS[4]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message('Respuesta correcta!!! Peeeero te dije que en una palabra, nos quedaremos sólo con \'Sol\'. Seguimos')
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[4])
+        update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_varios_corazones_rosas)
-        # global button5
         button5 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
-        else:            
+        else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)            
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -411,21 +478,25 @@ def responder5(update, context):
             return ConversationHandler.END
 
     elif text.lower() =='amor' or text.lower() == 'mi amor':
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Es verdad que te digo así, pero hay otra forma que utilizo más. Vuélvelo a intentar\n PISTA: Te digo así porque mi mundo gira alrededor de ti, eres mi ...?')
         return PREGUNTA5
 
     else:
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA5
 
 
 def pregunta6(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[5]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[5]['pregunta'])
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random())
     CHAT_ID.send_sticker(sticker_flores)
     return PREGUNTA6
 
@@ -434,18 +505,27 @@ def responder6(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[5]:
         PREGUNTAS[5]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[5])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_golbo_corazon_rojo)
         global button6
         button6 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -454,16 +534,17 @@ def responder6(update, context):
             )
             return ConversationHandler.END
     else:
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA6
 
 
 def pregunta7(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[6]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[6]['pregunta'])
     return PREGUNTA7
 
 def responder7(update, context):
@@ -471,18 +552,27 @@ def responder7(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[6] or text.lower() == 'studio 55':
         PREGUNTAS[6]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[6])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_fantasmas_girando)
         global button7
         button7 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -493,20 +583,29 @@ def responder7(update, context):
     
     elif text.lower() == 'estudio' or text.lower() == 'estudio 55':
         PREGUNTAS[6]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message('Respuesta correcta!!! Solo un detalle, el bar llama \'Studio 55\', así lo dejaremos. Seguimos')
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[6])
+        update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_fantasmas_girando)
-        # global button7
         button7 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -516,16 +615,17 @@ def responder7(update, context):
             return ConversationHandler.END
     
     else:
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA7
 
 
 def pregunta8(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[7]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[7]['pregunta'])
     return PREGUNTA8
 
 def responder8(update, context):
@@ -533,18 +633,27 @@ def responder8(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[7]:
         PREGUNTAS[7]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[7])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_chocolate)
         global button8
         button8 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -555,20 +664,29 @@ def responder8(update, context):
 
     elif text.lower() == 'el chocolate':
         PREGUNTAS[7]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message('Respuesta correcta!!! Solo un detalle, nos quedaremos con \'Chocolate\'. Seguimos')
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[7])
+        update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_chocolate)
-        # global button8
         button8 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -578,16 +696,17 @@ def responder8(update, context):
             return ConversationHandler.END
 
     else:
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA8
 
 
 def pregunta9(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[8]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[8]['pregunta'])
     return PREGUNTA9
 
 def responder9(update, context):
@@ -595,18 +714,27 @@ def responder9(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[8] or text.lower() == 'orgullo y prejuicios':
         PREGUNTAS[8]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[8])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_perro_corazon)
         global button9
         button9 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -615,16 +743,17 @@ def responder9(update, context):
             )
             return ConversationHandler.END
     else:
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA9
 
 
 def pregunta10(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[9]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[9]['pregunta'])
     return PREGUNTA10
 
 def responder10(update, context):
@@ -632,18 +761,27 @@ def responder10(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[9]:
         PREGUNTAS[9]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[9])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_gusano_beso)
         global button10
         button10 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -654,20 +792,29 @@ def responder10(update, context):
 
     elif text.lower() == 'tacaños':
         PREGUNTAS[9]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text='Un poco feo eso no? Mejor digamos que por \'No pagar\'. Suena mejor, seguimos')
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[9])
+        update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_gusano_beso)
-        # global button10
         button10 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -677,16 +824,17 @@ def responder10(update, context):
             return ConversationHandler.END
 
     else:
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA10
 
 
 def pregunta11(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[10]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[10]['pregunta'])
     return PREGUNTA11
 
 def responder11(update, context):
@@ -694,18 +842,27 @@ def responder11(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[10] or text.lower() == 'miercoles':
         PREGUNTAS[10]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[10])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_enamorado)
         global button11
         button11 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -714,16 +871,17 @@ def responder11(update, context):
             )
             return ConversationHandler.END
     else:
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA11
 
 
 def pregunta12(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[11]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[11]['pregunta'])
     return PREGUNTA12
 
 def responder12(update, context):
@@ -731,18 +889,27 @@ def responder12(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[11] or text.lower() == 'izquierda':
         PREGUNTAS[11]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[11])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_breakingbad)
         global button12
         button12 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -751,15 +918,16 @@ def responder12(update, context):
             )
             return ConversationHandler.END
     else:
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA12
 
 def pregunta13(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[12]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[12]['pregunta'])
     return PREGUNTA13
 
 def responder13(update, context):
@@ -767,18 +935,27 @@ def responder13(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[12]:
         PREGUNTAS[12]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[12])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_globo_flechazo)
         global button13
         button13 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -787,15 +964,17 @@ def responder13(update, context):
             )
             return ConversationHandler.END
     else:
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA13
 
 
 def pregunta14(update, context):
-    query = update.callback_query
-    query.answer()
-    update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-    query.edit_message_text(text=PREGUNTAS[13]['pregunta'])
+    context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message(text=PREGUNTAS[13]['pregunta'])
     return PREGUNTA14
 
 def responder14(update, context):
@@ -803,18 +982,27 @@ def responder14(update, context):
     chat = update.message.chat
     if text.lower() == RESPUESTAS_CORRECTAS[13]:
         PREGUNTAS[13]['completado'] = True
-        chat.send_action(action=ChatAction.TYPING, timeout=1)
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
         chat.send_message(text=FRASES[13])
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         chat.send_sticker(sticker_gato_corazon)
         global button14
         button14 = InlineKeyboardButton(text=emojize(
             ":check_mark_button:", use_aliases=True), callback_data='completado')
         if comprobar_final()==True:
             buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random())
             CHAT_ID.send_sticker(sticker_regalo_globos)
             return ConversationHandler.END
         else:
+            chat.send_action(action=ChatAction.TYPING)
+            sleep(random()+2)
             chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
                 [button1, button2, button3, button4, button5],
                 [button6, button7, button8, button9, button10],
@@ -823,6 +1011,8 @@ def responder14(update, context):
             )
             return ConversationHandler.END
     else:
+        chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)    
         chat.send_message(text=emojize(":red_exclamation_mark:", use_aliases=True)+' Mi sol, fallaste. No pasa nada, vuelve a intentarlo')
         return PREGUNTA14
 
@@ -830,7 +1020,11 @@ def responder14(update, context):
 def final(update, context):
     buttonFinal=InlineKeyboardButton(text='Abrir regalo'+emoji_regalo, callback_data='regalo')
     chat = update.message.chat
+    chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
     chat.send_message('Mi sol '+emoji_sun+', has completado el juego. Pulsa en el siguiente botón para ver tus respuestas, juntas conforman el regalo final'+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True)+emojize(":drum:", use_aliases=True), reply_markup=InlineKeyboardMarkup([[buttonFinal]]))
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random())
     chat.send_sticker(sticker_regalo_globos)
 
 def comprobar_final():
@@ -843,35 +1037,42 @@ def comprobar_final():
 
 
 def list_update(update, context):
-    query = update.callback_query
-    query.answer()
     cont=0
     if comprobar_final()==False:
         for pregunta in PREGUNTAS:
             if pregunta['completado'] == True:
                 cont+=1
-        update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-        query.edit_message_text(text='LLevas '+str(cont)+' respondida(s) de 14\n Para continuar escribe: Te amo')
+        context.bot.delete_message(chat_id=update.callback_query.message.chat_id, message_id=update.callback_query.message.message_id)
+        update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
+        CHAT_ID.send_message(text='LLevas '+str(cont)+' respondida(s) de 14\n Para continuar escribe: Te amo')
+        update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+        sleep(random())
         CHAT_ID.send_sticker(sticker_mapache_telefono)
         return CONTINUAR
     else:
         text=emojize(":pleading_face:")
-        update.callback_query.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
-        query.edit_message_text('<b>T</b> <del>odo en 1</del>\n<b>E</b> <del>strellas</del>\n\n<b>C</b> <del>osquillas</del>\n<b>A</b> <del>dicto</del>\n<b>S</b> <del>ol</del>\n<b>A</b> <del>mor</del>\n<b>S</b> <del>tudio 55</del>\n\n<b>C</b> <del>hocolate</del>\n<b>O</b> <del>rgullo y prejucio</del>\n<b>N</b> <del>o pagar</del>\n<b>M</b> <del>iércoles</del>\n<b> I</b>  <del>zquierdo</del>\n<b>G</b> <del>igante</del>\n<b>O</b> <del>range</del>\n<b>?</b> Di que si '+text, parse_mode=ParseMode.HTML)
+        update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+2)
+        CHAT_ID.send_message('<b>T</b> <del>odo en 1</del>\n<b>E</b> <del>strellas</del>\n\n<b>C</b> <del>osquillas</del>\n<b>A</b> <del>dicto</del>\n<b>S</b> <del>ol</del>\n<b>A</b> <del>mor</del>\n<b>S</b> <del>tudio 55</del>\n\n<b>C</b> <del>hocolate</del>\n<b>O</b> <del>rgullo y prejucio</del>\n<b>N</b> <del>o pagar</del>\n<b>M</b> <del>iércoles</del>\n<b> I</b>  <del>zquierdo</del>\n<b>G</b> <del>igante</del>\n<b>O</b> <del>range</del>\n<b>?</b> Di que si '+text, parse_mode=ParseMode.HTML)
         return ConversationHandler.END
 
 def regalo(update, context):
     text=emojize(":pleading_face:")
-    update.callback_query.message.chat.send_action(action=ChatAction.UPLOAD_PHOTO, timeout=1)
+    update.callback_query.message.chat.send_action(action=ChatAction.UPLOAD_PHOTO)
+    sleep(random()+1)
     CHAT_ID.send_photo(open('image.jpg','rb'))
-    CHAT_ID.send_message('<b>T</b> <del>odo en 1</del>\n<b>E</b> <del>strellas</del>\n\n<b>C</b> <del>osquillas</del>\n<b>A</b> <del>dicto</del>\n<b>S</b> <del>ol</del>\n<b>A</b> <del>mor</del>\n<b>S</b> <del>tudio 55</del>\n\n<b>C</b> <del>hocolate</del>\n<b>O</b> <del>range</del>\n<b>N</b> <del>o pagar</del>\n<b>M</b> <del>iércoles</del>\n<b> I</b>  <del>zquierdo</del>\n<b>G</b> <del>igante</del>\n<b>O</b> <del>rgullo y prejucio</del>\n<b>?</b> Di que si '+text, parse_mode=ParseMode.HTML)
+    update.callback_query.message.chat.send_action(action=ChatAction.TYPING)
+    sleep(random()+2)
+    CHAT_ID.send_message('<b>T</b> <del>odo en 1</del>\n<b>E</b> <del>strellas</del>\n\n<b>C</b> <del>osquillas</del>\n<b>A</b> <del>dicto</del>\n<b>S</b> <del>ol</del>\n<b>A</b> <del>mor</del>\n<b>S</b> <del>tudio 55</del>\n\n<b>C</b> <del>hocolate</del>\n<b>O</b> <del>rgullo y prejucio</del>\n<b>N</b> <del>o pagar</del>\n<b>M</b> <del>iércoles</del>\n<b> I</b>  <del>zquierdo</del>\n<b>G</b> <del>igante</del>\n<b>O</b> <del>range</del>\n<b>?</b> Di que si '+text, parse_mode=ParseMode.HTML)
     return ConversationHandler.END
 
 def continuar(update, context):
     text = update.message.text
     chat = update.message.chat
     if text.lower() == 'te amo':
-        update.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
+        update.message.chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+1)
         chat.send_message('Mi sol '+emoji_sun+', selecciona la pregunta que deseas contestar '+emoji_pregunta+' o presiona sobre una ya respondida '+emojize(":check_mark_button:", use_aliases=True)+' para ver tu estadística.', reply_markup=InlineKeyboardMarkup([
             [button1, button2, button3, button4, button5],
             [button6, button7, button8, button9, button10],
@@ -880,7 +1081,8 @@ def continuar(update, context):
         )
         return ConversationHandler.END
     else:
-        update.message.chat.send_action(action=ChatAction.TYPING, timeout=1)
+        update.message.chat.send_action(action=ChatAction.TYPING)
+        sleep(random()+1)
         chat.send_message(text='Te dije que escribas *Te amo* '+emojize(":angry_face:", use_aliases=True))
         return CONTINUAR
 
