@@ -1,6 +1,9 @@
 import os
 import logging
-from telegram.ext import Updater, CommandHandler, ConversationHandler, CallbackQueryHandler, MessageHandler, Filters
+from telegram.ext import (
+    Updater, CommandHandler, ConversationHandler, CallbackQueryHandler,
+    MessageHandler, Filters, PicklePersistence
+)
 
 from constants import STATE_ANSWERING, STATE_CONTINUE_PROMPT
 from handlers import (
@@ -30,7 +33,8 @@ def main() -> None:
     if not token:
         logger.warning("No TOKEN environment variable provided! The bot might fail to start.")
 
-    updater = Updater(token=token, use_context=True)
+    persistence = PicklePersistence(filename='boda_bot_memory.pickle')
+    updater = Updater(token=token, use_context=True, persistence=persistence)
     dp = updater.dispatcher
 
     conv_handler = ConversationHandler(
@@ -49,7 +53,9 @@ def main() -> None:
                 MessageHandler(Filters.text & ~Filters.command, prompt_continue_handler)
             ]
         },
-        fallbacks=[CommandHandler('start', start_handler)]
+        fallbacks=[CommandHandler('start', start_handler)],
+        name='boda_conversation',
+        persistent=True
     )
 
     dp.add_handler(conv_handler)
