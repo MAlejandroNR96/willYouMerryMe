@@ -8,7 +8,8 @@ from telegram.ext import (
 from constants import STATE_ANSWERING, STATE_CONTINUE_PROMPT
 from handlers import (
     start_handler, ask_question_handler, check_answer_handler,
-    list_updated_handler, prompt_continue_handler, send_gift_handler
+    list_updated_handler, prompt_continue_handler, send_gift_handler,
+    restart_handler
 )
 
 # Setup basic logging
@@ -40,6 +41,7 @@ def main() -> None:
     conv_handler = ConversationHandler(
         entry_points=[
             CommandHandler('start', start_handler),
+            CommandHandler('restart', restart_handler),
             CallbackQueryHandler(start_handler, pattern='^start_cb$') 
         ],
         states={
@@ -53,7 +55,10 @@ def main() -> None:
                 MessageHandler(Filters.text & ~Filters.command, prompt_continue_handler)
             ]
         },
-        fallbacks=[CommandHandler('start', start_handler)],
+        fallbacks=[
+            CommandHandler('start', start_handler),
+            CommandHandler('restart', restart_handler)
+        ],
         name='boda_conversation',
         persistent=True
     )

@@ -79,6 +79,24 @@ def start_handler(update: Update, context: CallbackContext) -> int:
     )
     return STATE_ANSWERING
 
+def restart_handler(update: Update, context: CallbackContext) -> int:
+    """Explicitly resets the progress and restarts the application."""
+    chat = update.effective_chat
+    user = update.effective_user
+    
+    # Verificación de Seguridad (Lista Blanca)
+    from constants import ALLOWED_USERNAMES, ALLOWED_USER_IDS
+    if user.username not in ALLOWED_USERNAMES and user.id not in ALLOWED_USER_IDS:
+        return ConversationHandler.END
+
+    chat.send_message("🔄 Borrando toda la memoria y reiniciando el bot...")
+    
+    # Clear persistence data simply by clearing our user_data components
+    context.user_data['completed'] = set()
+    context.user_data['active_q'] = None
+    
+    return start_handler(update, context)
+
 def ask_question_handler(update: Update, context: CallbackContext) -> int:
     """Sends the selected question to the user."""
     query = update.callback_query
