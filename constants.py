@@ -2,7 +2,7 @@ from emoji import emojize
 
 def e(code: str) -> str:
     """Helper to convert emoji aliases to actual emojis."""
-    return emojize(code, use_aliases=True)
+    return emojize(code, language='alias')
 
 # EMOJIS
 EMOJI_HEART_EYES = e(":smiling_face_with_heart-eyes:")

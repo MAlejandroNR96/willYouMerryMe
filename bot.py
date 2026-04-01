@@ -1,8 +1,8 @@
 import os
 import logging
 from telegram.ext import (
-    Updater, CommandHandler, ConversationHandler, CallbackQueryHandler,
-    MessageHandler, Filters, PicklePersistence
+    ApplicationBuilder, CommandHandler, ConversationHandler, CallbackQueryHandler,
+    MessageHandler, filters, PicklePersistence
 )
 
 from constants import STATE_ANSWERING, STATE_CONTINUE_PROMPT
@@ -27,16 +27,18 @@ except ImportError:
     pass
 
 def main() -> None:
-    """Entrypoint string for the telegram bot logic"""
+    """Entrypoint string for the telegram bot logic using ApplicationBuilder (v20+)"""
     # Fetch token from environment variables
     token = os.environ.get('TOKEN')
     
     if not token:
         logger.warning("No TOKEN environment variable provided! The bot might fail to start.")
+        return
 
-    persistence = PicklePersistence(filename='boda_bot_memory.pickle')
-    updater = Updater(token=token, use_context=True, persistence=persistence)
-    dp = updater.dispatcher
+    persistence = PicklePersistence(filepath='boda_bot_memory.pickle')
+    
+    # Build asynchronous application
+    application = ApplicationBuilder().token(token).persistence(persistence).build()
 
     conv_handler = ConversationHandler(
         entry_points=[
@@ -49,10 +51,10 @@ def main() -> None:
                 CallbackQueryHandler(list_updated_handler, pattern='^completado$'),
                 CallbackQueryHandler(send_gift_handler, pattern='^regalo$'),
                 CallbackQueryHandler(ask_question_handler, pattern='^pregunta_[0-9]+$'),
-                MessageHandler(Filters.text & ~Filters.command, check_answer_handler)
+                MessageHandler(filters.TEXT & ~filters.COMMAND, check_answer_handler)
             ],
             STATE_CONTINUE_PROMPT: [
-                MessageHandler(Filters.text & ~Filters.command, prompt_continue_handler)
+                MessageHandler(filters.TEXT & ~filters.COMMAND, prompt_continue_handler)
             ]
         },
         fallbacks=[
@@ -63,11 +65,10 @@ def main() -> None:
         persistent=True
     )
 
-    dp.add_handler(conv_handler)
+    application.add_handler(conv_handler)
     
-    logger.info("Bot starting polling...")
-    updater.start_polling()
-    updater.idle()
+    logger.info("Bot starting polling asymmetrically...")
+    application.run_polling()
 
 if __name__ == '__main__':
     main()
